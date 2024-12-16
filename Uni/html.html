@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arima:wght@600&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Arima', sans-serif;
+            background-color: #333333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .schedule-container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #dddddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-family: 'Arima', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+        }
+        th {
+            font-family: 'Arima', sans-serif;
+            background-color: rgba(53, 50, 50, 0.19);
+        }
+        td {
+            background-color: rgb(255, 255, 255);
+        }
+        .progress-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: red;
+            visibility: hidden;
+        }
+        .time-info {
+            font-family: 'Arima', sans-serif;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .time-left {
+            font-family: 'Arima', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .time-until {
+            font-family: 'Arima', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0288d1;
+        }
+    </style>
+</head>
+<body>
+<div class="schedule-container">
+    <h1>Schedule ✨</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Время</th>
+            <th>Понедельник</th>
+            <th>Вторник</th>
+            <th>Среда</th>
+            <th>Четверг</th>
+            <th>Пятница</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>8:45-10:15</th>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div>LA: Mathematical Statistics</td>
+            <td><div class="progress-line"></div>LA: Elementary Japanese I</td>
+        </tr>
+        <tr>
+            <th>10:30-12:00</th>
+            <td><div class="progress-line"></div>LA: Introductory Statistics</td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div>LA: Elementary Japanese I</td>
+        </tr>
+        <tr>
+            <th>13:15-14:45</th>
+            <td><div class="progress-line"></div>LA: Elementary Japanese I</td>
+            <td><div class="progress-line"></div>LA: Philosophy of Modern Science</td>
+            <td><div class="progress-line"></div>LA: Introduction to Asian Societies</td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+        </tr>
+        <tr>
+            <th>15:00-16:30</th>
+            <td><div class="progress-line"></div>LA: Elementary Japanese I</td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div>LA: Scientific Writing and Presenting in English</td>
+        </tr>
+        <tr>
+            <th>16:45-18:15</th>
+            <td><div class="progress-line"></div>LA: Programming Practice (R)</td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div></td>
+            <td><div class="progress-line"></div>LA: Programming Practice (Python)</td>
+            <td><div class="progress-line"></div></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="time-info">
+        Текущий урок: <span id="current-lesson">Нет</span><br>
+        Время до конца пары: <span id="time-left" class="time-left">--:--</span><br>
+        Время до начала следующей пары: <span id="time-until" class="time-until">--:--</span>
+    </div>
+</div>
+
+<script>
+    const schedule = [
+        [ { subject: "", start: "08:45", end: "10:15" },
+            { subject: "LA: Introductory Statistics", start: "10:30", end: "12:00" },
+            { subject: "LA: Elementary Japanese I", start: "13:15", end: "14:45" },
+            { subject: "LA: Elementary Japanese I", start: "15:00", end: "16:30" },
+            { subject: "LA: Programming Practice (R)", start: "16:45", end: "18:15" }
+        ],
+        [ { subject: "", start: "08:45", end: "10:15" },
+            { subject: "", start: "10:30", end: "12:00" },
+            { subject: "LA: Philosophy of Modern Science", start: "13:15", end: "14:45" },
+            { subject: "", start: "15:00", end: "16:30" },
+            { subject: "", start: "16:45", end: "18:15" }
+        ],
+        [ { subject: "", start: "08:45", end: "10:15" },
+            { subject: "", start: "10:30", end: "12:00" },
+            { subject: "LA: Introduction to Asian Societies", start: "13:15", end: "14:45" },
+            { subject: "", start: "15:00", end: "16:30" },
+            { subject: "", start: "16:45", end: "18:15" }
+        ],
+        [ { subject: "LA: Mathematical Statistics", start: "08:45", end: "10:15" },
+            { subject: "", start: "10:30", end: "12:00" },
+            { subject: "", start: "13:15", end: "14:45" },
+            { subject: "", start: "15:00", end: "16:30" },
+            { subject: "LA: Programming Practice (Python)", start: "16:45", end: "18:15" }
+        ],
+        [ { subject: "LA: Elementary Japanese I", start: "08:45", end: "10:15" },
+            { subject: "LA: Elementary Japanese I", start: "10:30", end: "12:00" },
+            { subject: "", start: "13:15", end: "14:45" },
+            { subject: "LA: Scientific Writing and Presenting in English", start: "15:00", end: "16:30" },
+            { subject: "", start: "16:45", end: "18:15" }
+        ]
+    ];
+
+    function getTimeDifference(startTime, endTime) {
+        const now = new Date();
+        const [startHours, startMinutes] = startTime.split(":").map(Number);
+        const [endHours, endMinutes] = endTime.split(":").map(Number);
+
+        const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHours, startMinutes + 1);
+
+        // Добавляем одну минуту к окончанию урока
+        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), endHours, endMinutes );
+
+        const totalDuration = end - start;
+        const currentProgress = now - start;
+
+        return Math.max(0, Math.min(1, currentProgress / totalDuration)); // Прогресс от 0 до 1
+    }
+
+    function updateProgressLines() {
+        const now = new Date();
+        const day = now.getDay() - 1; // Преобразуем день недели (понедельник = 0)
+
+        if (day < 0 || day > 4) return; // Не отображаем линии в выходные
+
+        const todaySchedule = schedule[day];
+        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+        let currentLesson = null;
+
+        // Ищем текущий урок
+        todaySchedule.forEach((lesson) => {
+            if (currentTime >= lesson.start && currentTime <= lesson.end) {
+                currentLesson = lesson;
+            }
+        });
+
+        document.querySelectorAll('tbody tr').forEach((row, index) => {
+            const line = row.querySelector('.progress-line');
+
+            // Если текущий урок найден
+            if (currentLesson && todaySchedule[index] === currentLesson) {
+                const progress = getTimeDifference(currentLesson.start, currentLesson.end);
+                const cellHeight = row.querySelector('td').offsetHeight;
+                line.style.top = `${progress * cellHeight}px`;
+                line.style.visibility = 'visible'; // Показать линию
+            } else {
+                line.style.visibility = 'hidden'; // Скрыть линию для других строк
+            }
+        });
+
+        // Обновляем время до конца урока и до следующего урока
+        if (currentLesson) {
+            const timeLeft = getTimeDifference(currentLesson.start, currentLesson.end);
+            const timeLeftMinutes = Math.floor((1 - timeLeft) * (new Date(`1970-01-01T${currentLesson.end}:00Z`) - new Date(`1970-01-01T${currentLesson.start}:00Z`)) / 60000);
+            const hoursLeft = Math.floor(timeLeftMinutes / 60);
+            const minutesLeft = timeLeftMinutes % 60;
+
+            document.getElementById("current-lesson").textContent = currentLesson.subject;
+            document.getElementById("time-left").textContent = `${hoursLeft}:${minutesLeft.toString().padStart(2, '0')}`;
+        } else {
+            document.getElementById("current-lesson").textContent = "Нет текущего урока";
+            document.getElementById("time-left").textContent = "--:--";
+        }
+
+        // Поиск следующего урока
+        let nextLesson = todaySchedule.find(lesson => currentTime < lesson.start);
+        if (nextLesson) {
+            const timeUntil = getTimeDifference(currentTime, nextLesson.start);
+            const timeUntilMinutes = Math.floor(timeUntil * (new Date(`1970-01-01T${nextLesson.start}:00Z`) - now) / 60000);
+            const hoursUntil = Math.floor(timeUntilMinutes / 60);
+            const minutesUntil = timeUntilMinutes % 60;
+
+            document.getElementById("time-until").textContent = `${hoursUntil}:${minutesUntil.toString().padStart(2, '0')}`;
+        } else {
+            document.getElementById("time-until").textContent = "--:--";
+        }
+    }
+
+    setInterval(updateProgressLines, 1000); // Обновляем положение линии каждую секунду
+</script>
+</body>
+</html>
